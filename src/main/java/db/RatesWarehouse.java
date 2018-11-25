@@ -1,3 +1,5 @@
+package db;
+
 public class RatesWarehouse {
     private static RatesWarehouse instance = new RatesWarehouse();
     public static RatesWarehouse getInstance() { return getInstance(); }

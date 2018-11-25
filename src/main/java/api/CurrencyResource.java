@@ -1,8 +1,14 @@
 package api;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import db.RAMRatesDatabase;
+import db.RatesDatabaseAPI;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Map;
 
 /**
  * Glossary:
@@ -11,6 +17,10 @@ import javax.ws.rs.core.Response;
  */
 @Path("currencies")
 public class CurrencyResource {
+    private RatesDatabaseAPI db = RAMRatesDatabase.getInstance();
+    private Gson gson = new GsonBuilder()
+            .setPrettyPrinting()
+            .create();
 
     private static final Response NOT_IMPLEMENTED = Response
             .status(501)
@@ -21,13 +31,21 @@ public class CurrencyResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{currency}")
     public Response getRatesForCurrency(@PathParam("currency") String currency) {
-        return Response.ok("WTF").build();
+        Map<String, Double> rates = db.selectCurrencyRates(currency);
+        if (rates == null || rates.isEmpty()) {
+            return Response.ok("There is no rates associated with given currency: " + currency).build();
+        }
+        return Response.ok(this.mapToJson(rates)).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRatesForAllCurrencies() {
-        return NOT_IMPLEMENTED;
+        Map<String, Map<String, Double>> rates = db.selectCurrencyRates();
+        if (rates == null || rates.isEmpty()) {
+            return Response.ok("There is no any rates information available. Please repeat later").build();
+        }
+        return Response.ok(this.mapToJson(rates)).build();
     }
 
     @POST
@@ -45,5 +63,9 @@ public class CurrencyResource {
     @DELETE
     public Response removeExchangeRates(@PathParam("cesp") String cesp) {
         return NOT_IMPLEMENTED;
+    }
+
+    private String mapToJson(Map<?, ?> map) {
+        return gson.toJson(map);
     }
 }
