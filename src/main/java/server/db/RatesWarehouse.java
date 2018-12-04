@@ -1,4 +1,4 @@
-package db;
+package server.db;
 
 public class RatesWarehouse {
     private static RatesWarehouse instance = new RatesWarehouse();

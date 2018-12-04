@@ -1,8 +1,9 @@
+package server;
+
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
-import javax.naming.ConfigurationException;
 import java.io.IOException;
 import java.net.URI;
 
@@ -17,7 +18,7 @@ public class ServerMain {
     public static HttpServer startServer(String host, String port) {
         // create a resource config that scans for JAX-RS resources and providers
         String uri = String.format(BASE_URI_TEMPLATE, host, port);
-        final ResourceConfig rc = new ResourceConfig().packages("api");
+        final ResourceConfig rc = new ResourceConfig().packages("server/api");
         System.out.println(String.format("Jersey app started with WADL available at %sapplication.wadl", uri));
         System.out.println("Hit enter to stop it...");
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(uri), rc);

@@ -1,9 +1,9 @@
-package api;
+package server.api;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import db.RAMRatesDatabase;
-import db.RatesDatabaseAPI;
+import server.db.RAMRatesDatabase;
+import server.db.RatesDatabaseAPI;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -16,16 +16,11 @@ import java.util.Map;
  *
  */
 @Path("currencies")
-public class CurrencyResource {
+public class ServerCurrencyExchangeResource implements CurrencyExchangeRatesAPI {
     private RatesDatabaseAPI db = RAMRatesDatabase.getInstance();
     private Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .create();
-
-    private static final Response NOT_IMPLEMENTED = Response
-            .status(501)
-            .entity("This operation is not yet implemented")
-            .build();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -50,17 +45,20 @@ public class CurrencyResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Path("edit/{cesp}")
     public Response addCurrencyRates(@PathParam("cesp") String cesp) {
         return NOT_IMPLEMENTED;
     }
 
     @PATCH
     @Consumes(MediaType.APPLICATION_JSON)
+    @Path("edit/{cesp}")
     public Response patchCurrencyRates(@PathParam("cesp") String cesp) {
         return NOT_IMPLEMENTED;
     }
 
     @DELETE
+    @Path("edit/{cesp}")
     public Response removeExchangeRates(@PathParam("cesp") String cesp) {
         return NOT_IMPLEMENTED;
     }
